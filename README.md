@@ -1,4 +1,4 @@
-**Analytic Newton–Hessian for Nadaraya–Watson Bandwidth Selection**
+### Analytic Newton–Hessian for Nadaraya–Watson Bandwidth Selection
 
 **1. Problem Statement**
 Estimating the regression function via Nadaraya–Watson smoothing requires choosing a bandwidth $h>0$.  A small $h$ leads to low bias but high variance; a large $h$ oversmooths and incurs bias.  Efficiently finding the optimal $h$ under the **exact** leave-one-out (LOO) cross-validation (CV) loss
@@ -15,7 +15,7 @@ is critical for reliable nonparametric regression without excessive compute.
 Over the decades, bandwidth selection methods include:
 
 * **Rule-of-thumb / Plug-in** (Silverman 1986; Sheather & Jones 1991): closed-form formulas under Gaussian design, $O(1)$ cost but limited accuracy when assumptions fail.
-* **Cross-validation** (LOO, K-fold, Generalized CV): directly minimize prediction error but require $O(n\times\#grid)$ or expensive CV loops.
+* **Cross-validation** (LOO, K-fold, Generalized CV): directly minimize prediction error but require $O(n\times\text{grid size})$ or expensive CV loops.
 * **Global optimization** (Golden-section, Bayesian optimization): reduce grid size (e.g.\ 75 evalu­ations) but still heavy relative to plug-in.
 * **Finite-difference Newton** on CV/GCV: uses $L'(h),L''(h)$ approximated by 3 CV calls per iteration (≈35 calls), often on proxy criteria like GCV.
 
@@ -122,6 +122,12 @@ For larger $n$, Epanechnikov analytic MSE converges to grid’s values.
 * **Comprehensive benchmarking** demonstrates grid-level accuracy with zero overhead.
 
 ---
+
+**9. Future Work**
+
+* Extend to additional compact kernels (Triweight, Quartic) by deriving their derivatives.
+* Multivariate smoothing via product or full-covariance kernels.
+* Formal convergence analysis under general conditions.
 
 **9. Future Work**
 
