@@ -38,19 +38,19 @@ $w_{ij}=K(u_{ij})/h$.  For each kernel:
 
 * **Gaussian**: $K(u)=\tfrac1{\sqrt{2\pi}}e^{-u^2/2}$.  Then
 
-  $$
+$$
    w=\frac{e^{-u^2/2}}{h\sqrt{2\pi}},\quad
    \partial_h w = w\frac{u^2-1}{h},\quad
    \partial^2_h w = w\frac{u^4-3u^2+1}{h^2}.
-  $$
+$$
 
 * **Epanechnikov**: $K(u)=\tfrac34(1-u^2)\mathbf1_{|u|\le1}$.  Then
 
-  $$
+$$
    w=\frac{3}{4}\frac{1-u^2}{h},\quad
    \partial_h w=0.75\frac{-1+3u^2}{h^2},\quad
    \partial^2_h w=1.5\frac{1-6u^2}{h^3}.
-  $$
+$$
 
 By the quotient rule,
 
