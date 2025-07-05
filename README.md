@@ -72,29 +72,7 @@ Scripts: `kde_analytic_hessian.py`, `nw_analytic_hessian.py`.
 
 ## 4  Results Summary
 
-### 4.1  KDE (Gaussian kernel – representative)
-
-| \$n\$ | \$\sigma\$ | Method    | ISE ± SD    | Calls ± SD |
-| ----: | ---------: | :-------- | ----------- | ---------- |
-|   100 |        0.5 | Grid      | 0.184±0.032 | 50         |
-|       |            | Newton    | 0.186±0.031 | **12**     |
-|       |            | Golden    | 0.182±0.031 | 22         |
-|       |            | Silverman | 0.191±0.023 | 1          |
-
-Epanechnikov shows the same pattern (±0.002 ISE); see `results_kde.csv`.
-
-### 4.2  Nadaraya–Watson (Gaussian kernel)
-
-| \$n\$ | \$\sigma\$ | Method | MSE ± SD    | Calls ± SD |
-| ----: | ---------: | :----- | ----------- | ---------- |
-|   100 |        0.5 | Grid   | 0.533±0.121 | 50         |
-|       |            | Newton | 0.533±0.121 | **6**      |
-|   200 |        1.0 | Grid   | 1.333±0.141 | 50         |
-|       |            | Newton | 1.333±0.141 | **5.7**    |
-|   500 |        2.0 | Grid   | 4.427±0.335 | 50         |
-|       |            | Newton | 4.427±0.335 | **3.6**    |
-
-Full tables in `results_nw.csv`.
+See notebooks for results
 
 ---
 
@@ -116,18 +94,3 @@ Full tables in `results_nw.csv`.
 | Härdle (LOLVC)                 | NW         | Grid              | LOOCV                | Widely cited                         |
 | **This work**                  | KDE & NW   | **Newton–Armijo** | **Exact LOOCV/LSCV** | First analytic Hessian; 4–12× faster |
 
----
-
-## 7  Reproducing the Figures
-
-```bash
-pip install numpy scipy matplotlib
-python kde_analytic_hessian.py   # writes results_kde.csv
-python nw_analytic_hessian.py    # writes results_nw.csv
-```
-
-Parameter grids (`ns`, `sigmas`, `kernels`) can be edited at the bottom of each script.
-
----
-
-Questions or improvements? Open an issue!
