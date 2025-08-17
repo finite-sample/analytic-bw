@@ -1,9 +1,11 @@
-"""Newton–Armijo bandwidth selection for Nadaraya–Watson regression."""
+"""Newton–Armijo bandwidth selection for Nadaraya–Watson regression using :func:`optim.newton_armijo`."""
 
 import argparse
 from typing import Tuple
 
 import numpy as np
+
+from optim import newton_armijo
 
 SQRT_2PI = np.sqrt(2 * np.pi)
 
@@ -57,34 +59,6 @@ def loocv_mse(x: np.ndarray, y: np.ndarray, h: float, kernel: str) -> Tuple[floa
     return loss, grad, hess
 
 
-def newton_armijo(
-    x: np.ndarray,
-    y: np.ndarray,
-    h0: float,
-    kernel: str = "gauss",
-    tol: float = 1e-5,
-    max_iter: int = 12,
-) -> Tuple[float, int]:
-    """Run Newton–Armijo to minimise LOOCV MSE."""
-    h = float(h0)
-    evals = 0
-    for _ in range(max_iter):
-        f, g, H = loocv_mse(x, y, h, kernel)
-        evals += 1
-        if abs(g) < tol:
-            break
-        step = -g / H if (H > 0 and np.isfinite(H)) else -0.25 * g
-        if abs(step) / h < 1e-3:
-            break
-        for _ in range(10):
-            h_new = max(h + step, 1e-6)
-            if loocv_mse(x, y, h_new, kernel)[0] < f:
-                h = h_new
-                break
-            step *= 0.5
-    return h, evals
-
-
 def main() -> None:
     parser = argparse.ArgumentParser(description="Analytic-Hessian NW bandwidth selection")
     parser.add_argument("data", nargs="?", help="Path to data with two columns x,y")
@@ -98,7 +72,8 @@ def main() -> None:
     else:
         x = np.linspace(-2, 2, 200)
         y = np.sin(x) + 0.1 * np.random.randn(len(x))
-    h, evals = newton_armijo(x, y, args.h0, kernel=args.kernel)
+    objective = lambda x_, h, k: loocv_mse(x_, y, h, k)
+    h, evals = newton_armijo(objective, x, args.h0, kernel=args.kernel)
     print(f"Optimal h={h:.5f} after {evals} evaluations")
 
 

@@ -1,11 +1,12 @@
-"""Newton–Armijo bandwidth selection for univariate KDE."""
+"""Newton–Armijo bandwidth selection for univariate KDE using :func:`optim.newton_armijo`."""
 
 import argparse
-from typing import Callable, Tuple
+from typing import Tuple
 
 import numpy as np
 
 from derivatives import KERNELS
+from optim import newton_armijo
 
 
 def lscv_generic(x: np.ndarray, h: float, kernel: str) -> Tuple[float, float, float]:
@@ -47,33 +48,6 @@ def lscv_generic(x: np.ndarray, h: float, kernel: str) -> Tuple[float, float, fl
     return score, grad, hess
 
 
-def newton_armijo(
-    x: np.ndarray,
-    h0: float,
-    kernel: str = "gauss",
-    tol: float = 1e-5,
-    max_iter: int = 12,
-) -> Tuple[float, int]:
-    """Run Newton–Armijo to minimise LSCV and return (h_opt, evaluations)."""
-    h = float(h0)
-    evals = 0
-    for _ in range(max_iter):
-        f, g, H = lscv_generic(x, h, kernel)
-        evals += 1
-        if abs(g) < tol:
-            break
-        step = -g / H if (H > 0 and np.isfinite(H)) else -0.25 * g
-        if abs(step) / h < 1e-3:
-            break
-        for _ in range(10):
-            h_new = max(h + step, 1e-6)
-            if lscv_generic(x, h_new, kernel)[0] < f:
-                h = h_new
-                break
-            step *= 0.5
-    return h, evals
-
-
 def main() -> None:
     parser = argparse.ArgumentParser(description="Analytic-Hessian KDE bandwidth selection")
     parser.add_argument("data", nargs="?", help="Path to 1D data (one value per line)")
@@ -85,7 +59,7 @@ def main() -> None:
         x = np.loadtxt(args.data, ndmin=1)
     else:
         x = np.random.randn(200)
-    h, evals = newton_armijo(x, args.h0, kernel=args.kernel)
+    h, evals = newton_armijo(lscv_generic, x, args.h0, kernel=args.kernel)
     print(f"Optimal h={h:.5f} after {evals} evaluations")
 
 
