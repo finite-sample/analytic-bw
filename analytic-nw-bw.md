@@ -128,9 +128,3 @@ For larger $n$, Epanechnikov analytic MSE converges to grid’s values.
 * Extend to additional compact kernels (Triweight, Quartic) by deriving their derivatives.
 * Multivariate smoothing via product or full-covariance kernels.
 * Formal convergence analysis under general conditions.
-
-**9. Future Work**
-
-* Extend to additional compact kernels (Triweight, Quartic) by deriving their derivatives.
-* Multivariate smoothing via product or full-covariance kernels.
-* Formal convergence analysis under general conditions.
